@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+
+data.json
+users.json
+transactions.json
+portfolio_michael_test.json
+transactions_michael_test.json

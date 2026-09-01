@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FinTech Portfolio Simulator</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #111827,
+                    #172554
+                );
+
+            color: white;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 20px 5%;
+
+            background: rgba(
+                15,
+                23,
+                42,
+                0.85
+            );
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(10px);
+
+        }
+
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+
+        .nav-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+
+        .username {
+
+            color: #94a3b8;
+
+        }
+
+
+        .logout-button {
+
+            display: inline-block;
+
+            padding: 9px 15px;
+
+            background: #ef4444;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+
+        }
+
+
+        .logout-button:hover {
+
+            background: #dc2626;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 30px 0 50px;
+
+        }
+
+
+        .welcome {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .welcome h1 {
+
+            margin-bottom: 5px;
+
+            font-size: 32px;
+
+        }
+
+
+        .welcome p {
+
+            color: #94a3b8;
+
+        }
+
+
+        /* =========================
+           FLASH MESSAGES
+        ========================= */
+
+        .flash-message {
+
+            padding: 15px 18px;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+        }
+
+
+        .flash-message.error {
+
+            background: rgba(
+                127,
+                29,
+                29,
+                0.9
+            );
+
+            color: #fecaca;
+
+            border:
+                1px solid
+                #ef4444;
+
+        }
+
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .card {
+
+            background:
+                rgba(
+                    30,
+                    41,
+                    59,
+                    0.85
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+            border-radius: 16px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.2
+                );
+
+        }
+
+
+        .card-title {
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .card-value {
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 25px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .action-button {
+
+            display: inline-block;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            color: white;
+
+            font-weight: bold;
+
+            background: #334155;
+
+            transition: 0.2s;
+
+        }
+
+
+        .action-button:hover {
+
+            background: #475569;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================
+           BUY SECTION
+        ========================= */
+
+        .buy-card {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .buy-form {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr
+                auto;
+
+            gap: 12px;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            background: #0f172a;
+
+            color: white;
+
+            border:
+                1px solid
+                #334155;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-size: 15px;
+
+        }
+
+
+        input:focus {
+
+            border-color: #3b82f6;
+
+        }
+
+
+        .buy-button {
+
+            padding:
+                13px
+                22px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #22c55e;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+        }
+
+
+        .buy-button:hover {
+
+            background: #16a34a;
+
+        }
+
+
+        /* =========================
+           INVESTMENTS
+        ========================= */
+
+        .investments {
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .investment-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(
+                        250px,
+                        1fr
+                    )
+                );
+
+            gap: 18px;
+
+        }
+
+
+        .stock-card {
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.8
+                );
+
+            border:
+                1px solid
+                #334155;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+        }
+
+
+        .stock-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .stock-name {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+        }
+
+
+        .shares {
+
+            color: #94a3b8;
+
+        }
+
+
+        .stock-value {
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+            margin: 10px 0;
+
+        }
+
+
+        .profit {
+
+            margin-bottom: 15px;
+
+            font-weight: bold;
+
+        }
+
+
+        .profit-positive {
+
+            color: #22c55e;
+
+        }
+
+
+        .profit-negative {
+
+            color: #ef4444;
+
+        }
+
+
+        .sell-form {
+
+            display: flex;
+
+            gap: 8px;
+
+        }
+
+
+        .sell-form input {
+
+            min-width: 0;
+
+        }
+
+
+        .sell-button {
+
+            border: none;
+
+            border-radius: 8px;
+
+            padding: 10px 15px;
+
+            background: #ef4444;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .sell-button:hover {
+
+            background: #dc2626;
+
+        }
+
+
+        /* =========================
+           CHARTS
+        ========================= */
+
+        .charts-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr;
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .chart-card {
+
+            background:
+                rgba(
+                    30,
+                    41,
+                    59,
+                    0.85
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+            border-radius: 16px;
+
+            padding: 20px;
+
+            min-height: 380px;
+
+        }
+
+
+        .chart-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .chart-header h2 {
+
+            margin: 0;
+
+            font-size: 19px;
+
+        }
+
+
+        .stock-selector {
+
+            background: #0f172a;
+
+            color: white;
+
+            border:
+                1px solid
+                #334155;
+
+            padding: 8px 10px;
+
+            border-radius: 8px;
+
+        }
+
+
+        .chart-container {
+
+            position: relative;
+
+            height: 290px;
+
+            width: 100%;
+
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            padding: 30px;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .summary-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .charts-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .buy-form {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                flex-direction: column;
+
+                gap: 12px;
+
+            }
+
+
+            .nav-right {
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+            }
+
+
+            .welcome h1 {
+
+                font-size: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+        📊 FinTech Simulator
+
+    </div>
+
+
+    <div class="nav-right">
+
+        <span class="username">
+
+            👤 {{ username }}
+
+        </span>
+
+
+        <a
+            href="/logout"
+            class="logout-button"
+        >
+
+            🚪 Logout
+
+        </a>
+
+    </div>
+
+
+</nav>
+
+
+
+<div class="container">
+
+
+    <!-- =========================
+         WELCOME
+    ========================= -->
+
+    <div class="welcome">
+
+        <h1>
+            Welcome back, {{ username }} 👋
+        </h1>
+
+        <p>
+            Manage your virtual investment portfolio.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         FLASH MESSAGES
+    ========================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <div class="summary-grid">
+
+
+        <div class="card">
+
+            <div class="card-title">
+
+                Available Cash
+
+            </div>
+
+            <div class="card-value">
+
+                £{{ balance }}
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+
+                Portfolio Value
+
+            </div>
+
+            <div class="card-value">
+
+                £{{ total }}
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+
+                Investments
+
+            </div>
+
+            <div class="card-value">
+
+                {{ stocks|length }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         ACTIONS
+    ========================= -->
+
+    <div class="actions">
+
+
+        <a
+            href="/transactions"
+            class="action-button"
+        >
+
+            🧾 Transaction History
+
+        </a>
+
+
+        <a
+            href="/"
+            class="action-button"
+        >
+
+            🔄 Refresh Prices
+
+        </a>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         BUY STOCK
+    ========================= -->
+
+    <div class="card buy-card">
+
+
+        <h2>
+            💰 Buy Stock
+        </h2>
+
+
+        <p style="color:#94a3b8;">
+
+            Enter a stock symbol and quantity.
+
+        </p>
+
+
+        <form
+            method="POST"
+            class="buy-form"
+        >
+
+
+            <input
+                name="name"
+                placeholder="Stock symbol e.g. AAPL"
+                required
+            >
+
+
+            <input
+                name="quantity"
+                type="number"
+                min="1"
+                placeholder="Quantity"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="buy-button"
+            >
+
+                Buy Stock
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         INVESTMENTS
+    ========================= -->
+
+    <div class="card investments">
+
+
+        <h2>
+            📈 Your Investments
+        </h2>
+
+
+        {% if stocks %}
+
+
+        <div class="investment-grid">
+
+
+            {% for stock in stocks %}
+
+
+            <div class="stock-card">
+
+
+                <div class="stock-header">
+
+
+                    <div class="stock-name">
+
+                        {{ stock.name }}
+
+                    </div>
+
+
+                    <div class="shares">
+
+                        {{ stock.quantity }} shares
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="stock-value">
+
+                    £{{ stock.value }}
+
+                </div>
+
+
+                {% if stock.profit >= 0 %}
+
+                    <div class="profit profit-positive">
+
+                        ▲ £{{ stock.profit }}
+
+                        <br>
+
+                        ({{ stock.percentage }}%)
+
+                    </div>
+
+                {% else %}
+
+                    <div class="profit profit-negative">
+
+                        ▼ £{{ stock.profit }}
+
+                        <br>
+
+                        ({{ stock.percentage }}%)
+
+                    </div>
+
+                {% endif %}
+
+
+
+                <!-- SELL -->
+
+                <form
+                    method="POST"
+                    action="/sell"
+                    class="sell-form"
+                >
+
+
+                    <input
+                        type="hidden"
+                        name="name"
+                        value="{{ stock.name }}"
+                    >
+
+
+                    <input
+                        name="quantity"
+                        type="number"
+                        min="1"
+                        max="{{ stock.quantity }}"
+                        placeholder="Shares"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="sell-button"
+                    >
+
+                        Sell
+
+                    </button>
+
+
+                </form>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            <p>
+                You don't own any stocks yet.
+            </p>
+
+            <p>
+                Use the form above to make your first investment.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =========================
+         CHARTS
+    ========================= -->
+
+    <div class="charts-grid">
+
+
+        <!-- STOCK PRICE CHART -->
+
+        <div class="chart-card">
+
+
+            <div class="chart-header">
+
+
+                <h2>
+                    📈 Stock Performance
+                </h2>
+
+
+                {% if stocks %}
+
+                <select
+                    id="stockSelector"
+                    class="stock-selector"
+                >
+
+                    {% for stock in stocks %}
+
+                    <option
+                        value="{{ stock.name }}"
+                    >
+
+                        {{ stock.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                {% endif %}
+
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="stockChart"
+                ></canvas>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ALLOCATION CHART -->
+
+        <div class="chart-card">
+
+
+            <div class="chart-header">
+
+                <h2>
+                    🍩 Portfolio Allocation
+                </h2>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <canvas
+                    id="allocationChart"
+                ></canvas>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+
+    /* =========================
+       STOCK PRICE CHART
+    ========================= */
+
+    let stockChart = null;
+
+
+    async function loadStockChart(symbol) {
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/chart/" + symbol
+                );
+
+
+            const data =
+                await response.json();
+
+
+            const canvas =
+                document.getElementById(
+                    "stockChart"
+                );
+
+
+            if (!canvas) {
+
+                return;
+
+            }
+
+
+            if (stockChart) {
+
+                stockChart.destroy();
+
+            }
+
+
+            stockChart = new Chart(
+                canvas,
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels:
+                            data.dates,
+
+                        datasets: [{
+
+                            label:
+                                symbol + " Price",
+
+                            data:
+                                data.prices,
+
+                            fill: true,
+
+                            tension: 0.3,
+
+                            borderWidth: 2
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true
+
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                ticks: {
+
+                                    color:
+                                        "#94a3b8"
+
+                                }
+
+                            },
+
+                            y: {
+
+                                ticks: {
+
+                                    color:
+                                        "#94a3b8"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.log(
+                "Stock chart error:",
+                error
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================
+       ALLOCATION CHART
+    ========================= */
+
+    async function loadAllocationChart() {
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/allocation"
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Allocation:",
+                data
+            );
+
+
+            const canvas =
+                document.getElementById(
+                    "allocationChart"
+                );
+
+
+            if (!canvas) {
+
+                return;
+
+            }
+
+
+            new Chart(
+                canvas,
+                {
+
+                    type: "doughnut",
+
+                    data: {
+
+                        labels:
+                            data.labels,
+
+                        datasets: [{
+
+                            data:
+                                data.values,
+
+                            borderWidth: 2
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        plugins: {
+
+                            legend: {
+
+                                position:
+                                    "bottom",
+
+                                labels: {
+
+                                    color:
+                                        "white"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.log(
+                "Allocation chart error:",
+                error
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================
+       START CHARTS
+    ========================= */
+
+    const selector =
+        document.getElementById(
+            "stockSelector"
+        );
+
+
+    if (selector) {
+
+
+        loadStockChart(
+            selector.value
+        );
+
+
+        selector.addEventListener(
+            "change",
+            function () {
+
+                loadStockChart(
+                    this.value
+                );
+
+            }
+        );
+
+    }
+
+
+    loadAllocationChart();
+
+
+</script>
+
+
+</body>
+
+</html>
